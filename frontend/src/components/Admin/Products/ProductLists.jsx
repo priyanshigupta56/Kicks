@@ -149,7 +149,7 @@ const handleSubmit = async (e) => {
 
     // Use the exact endpoint you provided in curl
     const res = await api.post(
-      "http://localhost:5000/api/admin/products/",
+      "/api/admin/products/",
       payload,
       { headers }
     );

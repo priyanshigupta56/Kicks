@@ -56,7 +56,7 @@ const AdminLogin = ({ onLoginSuccess } = {}) => {
     // SERVER LOGIN FOR NORMAL ADMINS
     try {
       const res = await api.post(
-        "http://localhost:5000/api/auth/login",
+        "https://kicks-tkmv.onrender.com/api/admin/login",
         { email: trimmedEmail, password },
         { headers: { "Content-Type": "application/json" } }
       );
