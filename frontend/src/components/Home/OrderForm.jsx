@@ -1,21 +1,19 @@
-
+// src/components/OrderForm.jsx (replace your current file)
 import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
-import api from "../../api/api"; // make sure this file exists (see step 3)
+import api from "../../api/api";
 
 const OrderForm = ({
   isOpen,
   onClose,
   product,
-  isLoggedIn = false, // optional prop; localStorage used if not provided
+  isLoggedIn = false,
   onRequireLogin = () => {},
-  onSuccess = () => {}
+  onSuccess = () => {},
 }) => {
-  // auto-detect login from localStorage if parent didn't pass isLoggedIn
   const token = localStorage.getItem("token");
   const isLoggedInComputed = isLoggedIn || !!token;
 
-  // form fields
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [pincode, setPincode] = useState("");
@@ -63,57 +61,76 @@ const OrderForm = ({
     });
   const dec = () => setQuantity((q) => Math.max(1, q - 1));
 
-  const handleSubmit = async (ev) => {
-    ev.preventDefault();
+  // Helper: determine product id in multiple possible shapes
+  const getProductId = (p) => {
+    if (!p) return null;
+    if (typeof p === "string") return p;
+    // common fields
+    return p._id || p.id || (p.product && (p.product._id || p.product.id)) || null;
+  };
 
-    if (!isLoggedInComputed) {
-      // ask parent to send user to login (or do it here)
-      onRequireLogin();
-      return;
-    }
+  const safeToFixed = (n, decimals = 2) => {
+    const num = Number(n || 0);
+    return Number.isFinite(num) ? num.toFixed(decimals) : "0.00";
+  };
 
-    const e = validate();
-    setErrors(e);
-    if (Object.keys(e).length) return;
+const handleSubmit = async (ev) => {
+  ev.preventDefault();
 
-    setSubmitting(true);
+  if (!isLoggedInComputed) {
+    onRequireLogin();
+    return;
+  }
 
-    // Build the payload matching your backend API
-    const payload = {
-      product: product?.id || product?._id || null,
-      quantity: Number(quantity),
-      address: {
-        // Your form only has a single address input — map it to houseNo.
-        // If you want to collect houseNo/street/state separately later, you can add inputs.
-        houseNo: address.trim(),
-        street: "",
-        city: city.trim(),
-        state: "",
-        pincode: pincode.trim()
-      }
-    };
+  const e = validate();
+  setErrors(e);
+  if (Object.keys(e).length) return;
 
-    try {
-      // Attach Authorization header explicitly using token from localStorage
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  // 🔥 FIX: Always send MongoDB _id (required by your backend)
+  if (!product?._id) {
+    setErrors({ submit: "Product _id missing. Cannot place order." });
+    return;
+  }
 
-      const res = await api.post("/orders", payload, { headers });
-      const returnedOrder = res.data?.order || res.data;
+  setSubmitting(true);
 
-      setSuccessMsg("Order placed successfully.");
-      onSuccess(returnedOrder);
-    } catch (err) {
-      console.error("Order save failed:", err.response || err);
-      const msg = err.response?.data?.msg || err.response?.data?.error || err.message || "Order failed";
-      setErrors({ submit: msg });
-    } finally {
-      setSubmitting(false);
-      setTimeout(() => {
-        onClose();
-        setSuccessMsg("");
-      }, 1200);
+  const payload = {
+    product: product._id,       // <-- FIXED (send real _id)
+    quantity: Number(quantity),
+    address: {
+      houseNo: address.trim(),
+      street: "N/A",
+      city: city.trim(),
+      state: "N/A",
+      pincode: pincode.trim(),
     }
   };
+
+  try {
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+    const res = await api.post("/orders", payload, { headers });
+
+    setSuccessMsg("Order placed successfully.");
+    onSuccess(res.data);
+
+    setTimeout(() => {
+      onClose();
+      setSuccessMsg("");
+    }, 1200);
+
+  } catch (err) {
+    console.error("Order save failed:", err.response || err);
+    setErrors({
+      submit:
+        err.response?.data?.message ||
+        err.response?.data?.msg ||
+        "Order failed. Please try again.",
+    });
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true" role="dialog">
@@ -122,10 +139,8 @@ const OrderForm = ({
       <div className="relative w-full max-w-3xl mx-4 bg-white rounded-xl shadow-lg">
         <div className="flex items-center justify-between px-6 py-4 border-b">
           <div className="flex items-center gap-3">
-            <h3 className="text-lg font-semibold">
-              {product ? `Buy: ${product.name}` : "Place Order"}
-            </h3>
-            {product && <span className="text-sm text-gray-500"> • ₹{product.price}</span>}
+            <h3 className="text-lg font-semibold">{product ? `Buy: ${product.name}` : "Place Order"}</h3>
+            {product && <span className="text-sm text-gray-500"> • ₹{product?.price ?? "0.00"}</span>}
           </div>
 
           <button onClick={() => onClose()} className="p-2 rounded-md hover:bg-gray-100" aria-label="Close">
@@ -199,7 +214,7 @@ const OrderForm = ({
 
                 <div>
                   <div className="text-sm text-gray-500">Total</div>
-                  <div className="text-lg font-semibold">₹{(Number(product?.price || 0) * Number(quantity)).toFixed(2)}</div>
+                  <div className="text-lg font-semibold">₹{safeToFixed(Number(product?.price || 0) * Number(quantity))}</div>
                 </div>
               </div>
 

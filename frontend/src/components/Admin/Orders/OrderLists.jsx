@@ -1,11 +1,8 @@
 // src/components/Admin/Orders/OrderLists.jsx
 import React from "react";
+import api from "../../../api/api";
 
-/**
- * OrderLists
- * - Displays: Order ID, User (name & email), Product, Quantity, Address details, Created date/time, Status
- * - Replace placeholder `orders` with API call / props when ready
- */
+
 
 const sampleOrders = [
   {
@@ -62,7 +59,7 @@ function renderAddress(a) {
 }
 
 export default function OrderLists() {
-  const [orders, setOrders] = React.useState(sampleOrders);
+  const [orders, setOrders] = React.useState([]);
 
   // change order status locally (replace with API update later)
   const updateStatus = (orderId, newStatus) => {
@@ -91,6 +88,38 @@ export default function OrderLists() {
     a.click();
     URL.revokeObjectURL(url);
   };
+
+React.useEffect(() => {
+  const fetchOrders = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+      const res = await api.get("/admin/orders", { headers });
+
+      // Always ensure it's an array
+      const fetched = Array.isArray(res.data?.orders) ? res.data.orders : [];
+
+      // Format for frontend UI
+      setOrders(
+        fetched.map(order => ({
+          id: order._id,
+          user: order.user,
+          product: order.product?.title,
+          qty: order.quantity,
+          address: order.address,
+          createdAt: order.createdAt,
+          status: order.status,
+        }))
+      );
+
+    } catch (err) {
+      console.error("Failed to fetch orders:", err.response || err);
+    }
+  };
+
+  fetchOrders();
+}, []);
 
   return (
     <div className="space-y-4">

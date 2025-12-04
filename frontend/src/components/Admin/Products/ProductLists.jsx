@@ -1,7 +1,7 @@
 // src/components/Admin/Products/ProductLists.jsx
 import React from "react";
-import { products as initialProducts } from "../../../data/products"; // adjust path if needed
-
+import { products as initialProducts } from "../../../data/products"; 
+import api from "../../../api/api";
 // localStorage key
 const STORAGE_KEY = "kicks_products";
 
@@ -115,45 +115,73 @@ export default function ProductLists() {
     reader.readAsDataURL(file);
   };
 
-  // Submit Add / Edit
-  const handleSubmit = async (e) => {
-    e?.preventDefault();
-    setError("");
+// Submit Add / Edit
+const handleSubmit = async (e) => {
+  e?.preventDefault();
+  setError("");
 
-    // validation
-    if (!title.trim() || !description.trim() || !price) {
-      setError("All fields are required.");
-      return;
-    }
-    if (isNaN(Number(price)) || Number(price) <= 0) {
-      setError("Price must be a positive number.");
-      return;
-    }
+  if (!title.trim() || !description.trim() || !price) {
+    setError("All fields are required.");
+    return;
+  }
 
-    // Image must be present either as preview (existing) or just-uploaded file
-    if (!imagePreview) {
-      setError("Please upload an image (800x800 px).");
-      return;
-    }
+  if (isNaN(Number(price)) || Number(price) <= 0) {
+    setError("Price must be a positive number.");
+    return;
+  }
 
-    // Use imagePreview (data URL) directly for storage in demo (in production upload to server)
-    const payload = {
-      id: isEditing ? editingId : String(Date.now()),
-      title: title.trim(),
-      description: description.trim(),
+  if (!imagePreview) {
+    setError("Please upload an image (800x800 px).");
+    return;
+  }
+
+  // Build payload for backend (matches your curl payload)
+  const payload = {
+    image: imagePreview,
+    title: title.trim(),
+    description: description.trim(),
+    price: String(Number(price)) // your curl used price as string
+  };
+
+  try {
+    // read token from localStorage (you said you already store it)
+    const token = localStorage.getItem("token");
+    const headers = token
+      ? {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      : { "Content-Type": "application/json" };
+
+    // Use the exact endpoint you provided in curl
+    const res = await api.post(
+      "http://localhost:5000/api/admin/products/",
+      payload,
+      { headers }
+    );
+
+    // update UI locally using response _id if present
+    const newProduct = {
+      id: res.data?._id || String(Date.now()),
+      title,
+      description,
       price: Number(price),
-      image: imagePreview,
+      image: imagePreview
     };
 
     if (isEditing) {
-      setProducts((prev) => prev.map((p) => (p.id === editingId ? { ...p, ...payload } : p)));
+      setProducts((prev) => prev.map((p) => (p.id === editingId ? newProduct : p)));
     } else {
-      setProducts((prev) => [payload, ...prev]);
+      setProducts((prev) => [newProduct, ...prev]);
     }
 
     setShowModal(false);
     clearForm();
-  };
+  } catch (err) {
+    console.error("Product creation failed: ", err.response || err);
+    setError(err.response?.data?.message || "Failed to save product.");
+  }
+};
 
   return (
     <div className="space-y-4">
