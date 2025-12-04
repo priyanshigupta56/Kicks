@@ -1,4 +1,3 @@
-// src/components/Products.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { products as productsData } from "../../data/products";
@@ -9,16 +8,13 @@ import api from "../../api/api";
 const parseNumericPrice = (price) => {
   if (price == null) return NaN;
 
-  // If price is an object like { amount: 100, currency: 'INR' }
   if (typeof price === "object") {
     if ("amount" in price) return Number(price.amount);
     return NaN;
   }
 
-  // If price is already a number
   if (typeof price === "number") return price;
 
-  // Otherwise treat as string: strip non-numeric except minus and dot
   const cleaned = String(price).replace(/[^0-9.-]+/g, "");
   const n = parseFloat(cleaned);
   return Number.isFinite(n) ? n : NaN;
@@ -27,13 +23,11 @@ const parseNumericPrice = (price) => {
 const formatPrice = (price, opts = { currencySymbol: "Rs " }) => {
   const num = parseNumericPrice(price);
   if (!Number.isFinite(num)) return null;
-  // format to 2 decimals
+  
   return `${opts.currencySymbol}${num.toFixed(2)}`;
 };
 
-/**
- * Product card
- */
+
 const Product = ({ product, onBuyNow }) => {
   const imageSrc = product?.image || "https://via.placeholder.com/600x400?text=No+Image";
   const priceText = formatPrice(product?.price) || "Rs N/A";
@@ -98,9 +92,7 @@ const Product = ({ product, onBuyNow }) => {
   );
 };
 
-/**
- * Products list (parent)
- */
+
 const Products = ({ products = productsData, isLoggedIn = false }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [orderOpen, setOrderOpen] = useState(false);

@@ -1,8 +1,7 @@
-// src/components/Admin/AdminLayout.jsx
-// src/components/Admin/AdminLayout.jsx
+
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { User } from "lucide-react"; // optional — swap if you don't have lucide
+import { User } from "lucide-react"; 
 import logo from "../../assets/img/logo2.png";
 
 export default function AdminLayout({ children }) {
@@ -55,7 +54,7 @@ export default function AdminLayout({ children }) {
   );
 }
 
-/* ---------- Sidebar link (NavLink for active state) ---------- */
+/* Sidebar link  */
 function SidebarLink({ to, label }) {
   return (
     <NavLink
@@ -73,7 +72,7 @@ function SidebarLink({ to, label }) {
   );
 }
 
-/* ---------- Topbar ---------- */
+/* Topbar  */
 function Topbar({ onProfileClick }) {
   return (
     <div className="flex items-center justify-between p-4 bg-white border-b">

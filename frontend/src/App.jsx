@@ -17,26 +17,26 @@ import Settings from "./components/Admin/Settings";
 function App() {
   return (
     <Router>
-     {/* Add Toaster here so it works globally */}
+
       <Toaster position="top-right" reverseOrder={false} />
       <Routes>
         <Route path="/" element={<Home />} />
-         <Route path="/product/:id" element={<ProductDetails />} />
-         <Route path="/login" element={<Login />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route
-  path="/admin/dashboard"
-  element={
-    <AdminLayout>
-      <AdminDashboard />
-    </AdminLayout>
-  }
-/>
-<Route path="/admin/users" element={<AdminLayout><UserLists/></AdminLayout>} />
-<Route path="/admin/products" element={<AdminLayout><ProductLists/></AdminLayout>} />
-<Route path="/admin/orders" element={<AdminLayout><OrderLists/></AdminLayout>} />
-<Route path="/admin/settings" element={<AdminLayout><Settings/></AdminLayout>} />
+          path="/admin/dashboard"
+          element={
+            <AdminLayout>
+              <AdminDashboard />
+            </AdminLayout>
+          }
+        />
+        <Route path="/admin/users" element={<AdminLayout><UserLists /></AdminLayout>} />
+        <Route path="/admin/products" element={<AdminLayout><ProductLists /></AdminLayout>} />
+        <Route path="/admin/orders" element={<AdminLayout><OrderLists /></AdminLayout>} />
+        <Route path="/admin/settings" element={<AdminLayout><Settings /></AdminLayout>} />
       </Routes>
     </Router>
   );

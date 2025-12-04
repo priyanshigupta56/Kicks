@@ -1,24 +1,18 @@
-// src/components/Admin/Products/ProductLists.jsx
+
 import React from "react";
 import { products as initialProducts } from "../../../data/products"; 
 import api from "../../../api/api";
 // localStorage key
 const STORAGE_KEY = "kicks_products";
 
-/**
- * ProductLists
- * - Displays products (image, title, price, description)
- * - Add product (modal) with client-side validation (image must be 800x800)
- * - Edit / Delete
- * - Persists to localStorage for demo
- */
+
 export default function ProductLists() {
   const [products, setProducts] = React.useState(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) return JSON.parse(raw);
     } catch {}
-    // fallback to import data (make sure your data export is named `products`)
+  
     return initialProducts || [];
   });
 
@@ -26,15 +20,15 @@ export default function ProductLists() {
   const [isEditing, setIsEditing] = React.useState(false);
   const [editingId, setEditingId] = React.useState(null);
 
-  // form state
+ 
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [price, setPrice] = React.useState("");
-  const [imageFile, setImageFile] = React.useState(null); // raw File
-  const [imagePreview, setImagePreview] = React.useState(""); // dataURL
+  const [imageFile, setImageFile] = React.useState(null); 
+  const [imagePreview, setImagePreview] = React.useState(""); 
   const [error, setError] = React.useState("");
 
-  // Save products to storage whenever they change
+  // Save products to storage 
   React.useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
@@ -135,16 +129,16 @@ const handleSubmit = async (e) => {
     return;
   }
 
-  // Build payload for backend (matches your curl payload)
+  
   const payload = {
     image: imagePreview,
     title: title.trim(),
     description: description.trim(),
-    price: String(Number(price)) // your curl used price as string
+    price: String(Number(price)) 
   };
 
   try {
-    // read token from localStorage (you said you already store it)
+    //  token from localStorage
     const token = localStorage.getItem("token");
     const headers = token
       ? {
@@ -160,7 +154,7 @@ const handleSubmit = async (e) => {
       { headers }
     );
 
-    // update UI locally using response _id if present
+   
     const newProduct = {
       id: res.data?._id || String(Date.now()),
       title,
@@ -192,7 +186,7 @@ const handleSubmit = async (e) => {
         </button>
       </div>
 
-      {/* Products table */}
+       {/* Products table  */}
       <div className="bg-white rounded shadow overflow-x-auto">
         <table className="min-w-full text-sm">
           <thead className="bg-gray-50">

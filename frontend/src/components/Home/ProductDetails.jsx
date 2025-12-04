@@ -1,56 +1,46 @@
-// src/components/ProductDetails.jsx
+
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { products } from "../../data/products"; // adjust path if needed
+import { products } from "../../data/products"; 
 import Header from "../../utils/Header";
 import Footer from "../../utils/Footer";
-import api from "../../api/api"; // <-- ADDED: axios instance
+import api from "../../api/api"; 
 
-// Small helper for formatting price
+
 const formatPrice = (v) => `$${Number(v).toFixed(2)}`;
 
-/**
- * ProductDetails component
- * - Uses route param /product/:id by default
- * - Finds product from products data array, then fetches from backend by id
- *
- * Export: const ProductDetails = ... ; export default ProductDetails;
- */
 const ProductDetails = ({ productIdProp = null }) => {
   const params = useParams ? useParams() : {};
   const navigate = useNavigate ? useNavigate() : null;
   const id = productIdProp || params.id;
 
-  // Start with local lookup (same behavior as before), then replace with backend data if available
+
   const localProduct = products.find((p) => p.id === id || p._id === id);
 
-  // product state now holds the product used by the UI
   const [product, setProduct] = useState(localProduct || null);
 
-  // Keep the same UI states as before
   const [mainImage, setMainImage] = useState(product?.image || "");
   const [selectedColor, setSelectedColor] = useState(product?.colors?.[0] || "");
   const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] || "");
   const [qty, setQty] = useState(1);
 
-  // Fetch product from backend by id (minimal, read-only)
+ 
   useEffect(() => {
     let cancelled = false;
     const fetchProduct = async () => {
       if (!id) return;
       try {
         const res = await api.get(`/products/${id}`);
-        // backend might return the product object directly or wrapped e.g. { product: {...} }
+    
         const fetched = res.data && (res.data.product || res.data);
         if (!cancelled && fetched) {
           setProduct(fetched);
-          // update dependent UI state only if fetched contains those fields
+       
           setMainImage(fetched.image || fetched.images?.[0] || fetched.imageUrl || fetched.image);
           setSelectedColor(fetched.colors?.[0] || "");
           setSelectedSize(fetched.sizes?.[0] || "");
         }
       } catch (err) {
-        // silent fail — keep using local data (if any)
         console.error("Failed to fetch product by id:", err);
       }
     };
@@ -59,7 +49,7 @@ const ProductDetails = ({ productIdProp = null }) => {
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  
   }, [id]);
 
   // If product not found show message (same as before)
@@ -80,11 +70,11 @@ const ProductDetails = ({ productIdProp = null }) => {
   const saveAmount = oldPrice ? (oldPrice - product.price).toFixed(2) : null;
 
   const handleAddToCart = () => {
-    // placeholder: replace with your cart logic/store dispatch
+   
     console.log("Add to cart:", { id: product.id, qty, size: selectedSize, color: selectedColor });
-    // optionally navigate to cart or show toast
+    
     if (navigate) {
-      // navigate("/cart"); // uncomment if you want to redirect
+ 
     }
   };
 

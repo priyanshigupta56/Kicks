@@ -1,4 +1,4 @@
-// src/components/Admin/Orders/OrderLists.jsx
+
 import React from "react";
 import api from "../../../api/api";
 
@@ -41,17 +41,16 @@ const sampleOrders = [
 
 const STATUS_OPTIONS = ["Pending", "Processing", "Completed", "Cancelled"];
 
-// format ISO datetime to readable string
 function formatDateTime(iso) {
   try {
     const d = new Date(iso);
-    return d.toLocaleString(); // you can customize locale/options if needed
+    return d.toLocaleString(); 
   } catch {
     return iso;
   }
 }
 
-// helper: flatten address into lines
+
 function renderAddress(a) {
   if (!a) return "-";
   const parts = [a.line1, a.line2, `${a.city || ""} ${a.pincode || ""}`, a.state, a.country];
@@ -61,12 +60,12 @@ function renderAddress(a) {
 export default function OrderLists() {
   const [orders, setOrders] = React.useState([]);
 
-  // change order status locally (replace with API update later)
+ 
   const updateStatus = (orderId, newStatus) => {
     setOrders((prev) => prev.map(o => (o.id === orderId ? { ...o, status: newStatus } : o)));
   };
 
-  // optional: export displayed orders to CSV (simple implementation)
+  
   const exportCSV = () => {
     const headers = ["Order ID","User Name","User Email","Product","Quantity","Address","Created At","Status"];
     const rows = orders.map(o => [
@@ -97,7 +96,7 @@ React.useEffect(() => {
 
       const res = await api.get("/admin/orders", { headers });
 
-      // Always ensure it's an array
+      
       const fetched = Array.isArray(res.data?.orders) ? res.data.orders : [];
 
       // Format for frontend UI

@@ -1,4 +1,3 @@
-// src/components/OrderForm.jsx (replace your current file)
 import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import api from "../../api/api";
@@ -61,7 +60,7 @@ const OrderForm = ({
     });
   const dec = () => setQuantity((q) => Math.max(1, q - 1));
 
-  // Helper: determine product id in multiple possible shapes
+ 
   const getProductId = (p) => {
     if (!p) return null;
     if (typeof p === "string") return p;
@@ -86,7 +85,7 @@ const handleSubmit = async (ev) => {
   setErrors(e);
   if (Object.keys(e).length) return;
 
-  // 🔥 FIX: Always send MongoDB _id (required by your backend)
+  
   if (!product?._id) {
     setErrors({ submit: "Product _id missing. Cannot place order." });
     return;
@@ -95,7 +94,7 @@ const handleSubmit = async (ev) => {
   setSubmitting(true);
 
   const payload = {
-    product: product._id,       // <-- FIXED (send real _id)
+    product: product._id,       
     quantity: Number(quantity),
     address: {
       houseNo: address.trim(),

@@ -10,7 +10,7 @@ const FAQ = ({ faqs = defaultFaqs }) => {
 
   return (
     <section id="faq" className="py-20 bg-white">
-      {/* SAME WIDTH AS ALL OTHER SECTIONS */}
+   
       <div className="max-w-[1400px] mx-auto px-8">
         
         <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>

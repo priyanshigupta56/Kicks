@@ -13,7 +13,7 @@ const Hero = () => {
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/50"></div>
 
-      {/* LEFT-CONSTRAINED CONTENT */}
+      {/* LEFT  */}
       <div className="relative z-10 pl-10 md:pl-28 max-w-[600px]">
         <h1 className="text-white text-5xl md:text-6xl font-semibold leading-tight">
           Step Into Your Best

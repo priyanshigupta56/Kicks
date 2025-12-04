@@ -1,4 +1,4 @@
-// src/components/AdminLogin.jsx
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../utils/Header";
@@ -40,11 +40,11 @@ const AdminLogin = ({ onLoginSuccess } = {}) => {
       return;
     }
 
-    // FIXED ADMIN → DO NOT CALL API → JUST LOGIN DIRECTLY
+    // FIXED ADMIN 
     if (trimmedEmail === FIXED_ADMIN.email && password === FIXED_ADMIN.password) {
       const adminRecord = { name: FIXED_ADMIN.name, email: FIXED_ADMIN.email };
 
-      // Store a fake token so your admin pages keep working
+      
       localStorage.setItem("token", "STATIC_ADMIN_TOKEN");
 
       _setCurrentAdmin(adminRecord);

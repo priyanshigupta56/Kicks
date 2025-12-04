@@ -59,7 +59,7 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Charts / placeholders */}
+      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="font-semibold mb-3">Sales Overview</h3>

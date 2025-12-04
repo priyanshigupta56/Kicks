@@ -1,4 +1,4 @@
-// src/components/Auth/Login.jsx
+
 import React, { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Header from "../../utils/Header";
@@ -24,7 +24,7 @@ const Login = () => {
 
     try {
       const res = await api.post("/auth/login", form);
-      // Backend returns { token, user }
+      // Backend returns 
       const { token, user } = res.data;
 
       localStorage.setItem("token", token);

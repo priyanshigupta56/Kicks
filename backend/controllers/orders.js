@@ -5,7 +5,7 @@ exports.createOrder = async (req, res) => {
     const { product, quantity, address } = req.body;
 
     const order = await Order.create({
-      user: req.user._id, // from auth middleware
+      user: req.user._id, 
       product,
       quantity,
       address,

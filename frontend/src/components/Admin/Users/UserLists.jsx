@@ -1,20 +1,7 @@
-// src/components/Admin/Users/UserLists.jsx
 import React from "react";
-
-/**
- * UserLists.jsx
- * - Shows Name, Email, Phone, Status
- * - Toggle Active / Blocked (persists to localStorage key: 'kicks_users')
- * - Includes search and status filter
- *
- * Exports:
- * - isUserBlocked(email) -> boolean
- * - getUsers() -> array
- */
 
 const STORAGE_KEY = "kicks_users";
 
-// sample seed users (used only if no users in storage)
 const SAMPLE_USERS = [
   { id: "u1", name: "Priyanshi Gupta", email: "priyanshi@example.com", phone: "9999999999", status: "Active" },
   { id: "u2", name: "Chitransh Kumar", email: "chitransh@example.com", phone: "8888888888", status: "Blocked" },
@@ -37,7 +24,6 @@ function writeUsersToStorage(users) {
   } catch {}
 }
 
-/** Exported helpers for other parts of the app to check user status */
 export function getUsers() {
   const stored = readUsersFromStorage();
   return stored ?? SAMPLE_USERS;
@@ -50,22 +36,22 @@ export function isUserBlocked(email) {
   return !!(u && u.status === "Blocked");
 }
 
-/* -------------------- Component -------------------- */
+
 export default function UserLists() {
-  // initial load: from storage or sample
+ 
   const [users, setUsers] = React.useState(() => {
     const stored = readUsersFromStorage();
     if (stored && Array.isArray(stored) && stored.length) return stored;
-    // seed storage for first-time demo (so admin can test toggles)
+    
     writeUsersToStorage(SAMPLE_USERS);
     return SAMPLE_USERS;
   });
 
   const [search, setSearch] = React.useState("");
-  const [filter, setFilter] = React.useState("all"); // all | active | blocked
-  const [busyId, setBusyId] = React.useState(null); // id being updated (for tiny loading state)
+  const [filter, setFilter] = React.useState("all"); 
+  const [busyId, setBusyId] = React.useState(null); // id being updated 
 
-  // Persist users to storage whenever they change
+  
   React.useEffect(() => {
     writeUsersToStorage(users);
   }, [users]);
@@ -77,7 +63,7 @@ export default function UserLists() {
     if (!confirm(`${action} user "${u.name}"?`)) return;
 
     setBusyId(id);
-    // simulate tiny delay (in real app this would be an API call)
+   
     setTimeout(() => {
       setUsers((prev) => prev.map((x) => (x.id === id ? { ...x, status: x.status === "Active" ? "Blocked" : "Active" } : x)));
       setBusyId(null);

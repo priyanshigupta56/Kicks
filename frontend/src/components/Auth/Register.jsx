@@ -1,4 +1,3 @@
-// src/components/Auth/Register.jsx
 import React, { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Header from "../../utils/Header";
@@ -39,7 +38,7 @@ const Register = () => {
       confirmPassword: form.confirmPassword,
       phone: form.phone
     };
-    // <--- corrected endpoint (singular "register")
+    
     const res = await api.post("/auth/register", payload);
     const { token, user } = res.data;
     if (token) {

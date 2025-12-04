@@ -2,11 +2,8 @@ import { useState } from "react";
 import { Menu, X, Search, User, ShoppingCart } from "lucide-react";
 import logoSrc from "../assets/img/logokicks.png";
 import { Link } from "react-router-dom";
-/**
- * Props:
- *  - logoSrc: string (path to logo image)
- *  - cartCount: number (badge count)
- */
+
+
 const Header = ({ logoSrc: logo = logoSrc, cartCount = 0 }) => {
   const [open, setOpen] = useState(false);
 
@@ -19,7 +16,7 @@ const Header = ({ logoSrc: logo = logoSrc, cartCount = 0 }) => {
             src={logoSrc}
             alt="KICKS logo"
             className="w-10 h-10 md:w-12 md:h-12 object-contain"
-            // recommended sizes: 40x40 (mobile) / 48x48 (desktop)
+
             width={50}
             height={50}
           />
@@ -28,7 +25,7 @@ const Header = ({ logoSrc: logo = logoSrc, cartCount = 0 }) => {
           </span>
         </div>
 
-        {/* Center: Navigation (keeps centered on desktop) */}
+        {/* Center: Navigation  */}
         <nav className="hidden md:flex flex-1 justify-center">
           <ul className="flex items-center gap-8 text-gray-700 font-medium">
             <li>
@@ -68,7 +65,7 @@ const Header = ({ logoSrc: logo = logoSrc, cartCount = 0 }) => {
 
         {/* Right: Icons */}
         <div className="ml-auto flex items-center gap-4">
-          {/* Desktop icons */}
+
           <div className="hidden md:flex items-center gap-4">
             <button
               aria-label="Search"
@@ -77,13 +74,13 @@ const Header = ({ logoSrc: logo = logoSrc, cartCount = 0 }) => {
               <Search size={20} />
             </button>
 
-           <Link
-  to="/admin-login"
-  aria-label="Profile"
-  className="p-2 rounded-full hover:bg-gray-100 transition inline-flex items-center"
->
-  <User size={20} />
-</Link>
+            <Link
+              to="/admin-login"
+              aria-label="Profile"
+              className="p-2 rounded-full hover:bg-gray-100 transition inline-flex items-center"
+            >
+              <User size={20} />
+            </Link>
 
             <button
               aria-label="Cart"
@@ -112,9 +109,8 @@ const Header = ({ logoSrc: logo = logoSrc, cartCount = 0 }) => {
 
       {/* Mobile panel */}
       <div
-        className={`md:hidden bg-white shadow-md border-t transition-max-h duration-300 ease-in-out overflow-hidden ${
-          open ? "max-h-[420px] py-4" : "max-h-0"
-        }`}
+        className={`md:hidden bg-white shadow-md border-t transition-max-h duration-300 ease-in-out overflow-hidden ${open ? "max-h-[420px] py-4" : "max-h-0"
+          }`}
       >
         <div className="px-6 space-y-4">
           <nav>
@@ -144,7 +140,7 @@ const Header = ({ logoSrc: logo = logoSrc, cartCount = 0 }) => {
               </li>
               <li>
                 <a
-                  href="#auth"
+                  href="/login"
                   className="block"
                   onClick={() => setOpen(false)}
                 >
@@ -159,9 +155,13 @@ const Header = ({ logoSrc: logo = logoSrc, cartCount = 0 }) => {
             <button aria-label="Search" className="p-2 rounded-full hover:bg-gray-100 transition">
               <Search size={18} />
             </button>
-            <button aria-label="Profile" className="p-2 rounded-full hover:bg-gray-100 transition">
-              <User size={18} />
-            </button>
+            <Link
+              to="/admin-login"
+              aria-label="Profile"
+              className="p-2 rounded-full hover:bg-gray-100 transition inline-flex items-center"
+            >
+              <User size={20} />
+            </Link>
             <button aria-label="Cart" className="relative p-2 rounded-full hover:bg-gray-100 transition">
               <ShoppingCart size={18} />
               {cartCount > 0 && (

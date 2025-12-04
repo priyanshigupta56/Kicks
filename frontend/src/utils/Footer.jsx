@@ -1,7 +1,6 @@
-// src/components/Footer.jsx
 import React from "react";
 import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
-import logoImg from "../assets/img/logo2.png"; // <-- Replace with your logo path
+import logoImg from "../assets/img/logo2.png"; 
 
 const Footer = () => {
   return (

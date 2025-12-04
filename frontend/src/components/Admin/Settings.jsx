@@ -1,4 +1,3 @@
-// src/components/Admin/Settings.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -50,13 +49,13 @@ export default function Settings() {
 
   const [name, setName] = React.useState(current?.name || "");
   const [email, setEmail] = React.useState(current?.email || "");
-  const [password, setPassword] = React.useState(""); // plain password input (we store base64 in list)
+  const [password, setPassword] = React.useState(""); // plain password input
   const [message, setMessage] = React.useState(null);
   const [error, setError] = React.useState(null);
   const [saving, setSaving] = React.useState(false);
 
   React.useEffect(() => {
-    // reset messages when inputs change
+    // reset messages 
     setMessage(null);
     setError(null);
   }, [siteTitle, name, email, password]);
@@ -100,7 +99,7 @@ export default function Settings() {
       const record = {
         name: name.trim(),
         email: email.trim(),
-        // if password provided, store base64; otherwise keep existing if present
+        // if password provided
         passwordBase64: password ? btoa(password) : (matchIndex >= 0 ? admins[matchIndex].passwordBase64 : undefined),
       };
 
@@ -217,7 +216,7 @@ export default function Settings() {
               <button
                 type="button"
                 onClick={() => {
-                  // reset fields to current stored values
+                 
                   const cur = readCurrent();
                   setName(cur?.name || "");
                   setEmail(cur?.email || "");

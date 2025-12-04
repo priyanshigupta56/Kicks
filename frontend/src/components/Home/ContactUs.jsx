@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-/**
- * Two-column Contact Us with right-side card (offers/info)
- * - Left: compact contact form with captcha
- * - Right: card showing offers/notes (copy editable)
- *
- * Usage: <ContactUs />
- */
 const ContactUs = () => {
   // form state
   const [name, setName] = useState("");
@@ -70,7 +63,7 @@ const ContactUs = () => {
     };
 
     try {
-      // send to backend route (implement /api/contact on your server)
+      // send to backend route
      const res = await fetch("http://localhost:5000/api/contact/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -78,7 +71,7 @@ const ContactUs = () => {
       });
 
       if (!res.ok) {
-        // fallback to logging if backend unavailable
+        // fallback 
         console.warn("Server error, logged locally");
         console.log("Contact fallback:", payload);
         setSuccessMsg("Message recorded (server fallback).");
@@ -113,13 +106,13 @@ const ContactUs = () => {
 
       {/* Two-column layout */}
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-         {/* LEFT CARD (Contact Form) */}
+         {/* (Contact Form) */}
   <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-200 h-full">
- {/* FORCE SAME MIN-HEIGHT */}
+ 
     <div className="h-full flex flex-col">
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* small inputs like screenshot (compact) */}
+           
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm text-gray-700">Name</label>
@@ -216,7 +209,6 @@ const ContactUs = () => {
        {/* RIGHT CARD (Kicks Club) */}
   <aside className="bg-[#f2f2f2] rounded-xl shadow-sm p-8 border border-gray-200 h-full">
 
-    {/* FORCE SAME MIN-HEIGHT */}
     <div className="h-full flex flex-col justify-between">
 
   <h2 className="text-4xl font-bold text-gray-900 leading-tight mb-6">
