@@ -4,7 +4,7 @@ import Hero from '../../components/Home/Hero';
 import Products from '../../components/Home/Products';
 import Footer from '../../utils/Footer';
 import FAQ from '../../components/Home/FAQ';
-import ContactUs from '../../components/Home/Contactus';
+import ContactUs from '../../components/Home/ContactUs';
 
 
 const Home = () => {
